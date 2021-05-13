@@ -1,6 +1,7 @@
 # Demographic Modeling
 
-### Demographic modeling using site frequency spectrum of two populations.
+## Demographic modeling using site frequency spectrum of two populations.
+
 
 - Requires `moments` to be installed (https://bitbucket.org/simongravel/moments/src/master/):
 ```
@@ -11,12 +12,6 @@ pip install git+https://bitbucket.org/simongravel/moments.git
 ```
 git clone https://github.com/dportik/moments_pipeline.git
 ```
-### Population Information:
-
-- **Pop1 = Dana Point = 33**
-- **Pop2 = Santa Margarita = 88**
-- **Pop2 = South San Mateo = 33**
-
 # Steps: 
 
 ## Part 1A. Allele Frequencies:
