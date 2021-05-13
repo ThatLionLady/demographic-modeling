@@ -1,5 +1,7 @@
 # Demographic Modeling
 
+### Demographic modeling using site frequency spectrum of two populations.
+
 - Requires `moments` to be installed (https://bitbucket.org/simongravel/moments/src/master/):
 ```
 pip install git+https://bitbucket.org/simongravel/moments.git
