@@ -3,7 +3,7 @@ setwd('')
 models=c('no_mig','sym_mig','asym_mig','anc_sym_mig','anc_asym_mig','sec_contact_sym_mig','sec_contact_asym_mig','no_mig_size','sym_mig_size','asym_mig_size','anc_sym_mig_size','anc_asym_mig_size','sec_contact_sym_mig_size','sec_contact_asym_mig_size','sym_mig_twoepoch','asym_mig_twoepoch','sec_contact_sym_mig_three_epoch','sec_contact_asym_mig_three_epoch','sec_contact_sym_mig_size_three_epoch','sec_contact_asym_mig_size_three_epoch')
 
 ##This loop reads in all the optim files for the models above
-prefix='DP_SM'
+prefix='Pop1_Pop2'
 fits=NULL
  
 for (model in models){
