@@ -11,7 +11,7 @@ from datetime import datetime
 mylist=[]
 
 for x in range(65,1,-1): # range starts with number of total alleles-1
-	fs = moments.Spectrum.from_file("DP_SS.2dsfs")
+	fs = moments.Spectrum.from_file("Pop1_Pop2.2dsfs")
 	proj = [x, x]
 	fs=fs.project(proj)
 	mylist.append(format(numpy.around(fs.S(), 2)))
