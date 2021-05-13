@@ -53,7 +53,7 @@ Calculate 2D site frequency spectum in `angsd` then read in data to `moments_pip
     - output = 3 heat maps (data, model, residuals) and a residuals bar graph
 
 # Part 1A. Allele Frequencies:
-## `dadi` SNP format
+### `dadi` SNP format
 
 - ***column 1***: the in-group reference sequence at that SNP, including flanking bases (unknown bases denoted by -). 
     - The header label is arbitrary.
@@ -85,8 +85,28 @@ Maj     Min     Allele1 DP      SS      Allele2 DP.1    SS.1    Chr     Pos
 -G-     -A-     G       20      22      A       0       4       HiC_scaffold_1  13402
 ```
 
-- R script to reformat *...mafs_fst.vep.txt*, which is merged MAF output from `angsd`
-    - *~/USS/conservation-genetics/PPM/Scripts/PPM_Angsd_Population_MAFS.sh*
+- R script to reformat merged MAF output from `angsd` (ex. below).
+```
+#!/bin/bash
+BAMDIR=$1 # Path to directory of bamfiles
+BAMLIST=$2 # Path to textfile listing bamfiles to include in population-level MAF 
+REFERENCE=$3 # Path to reference genome 
+SNPLIST=$4 #Path to Global SNPList, e.g. 'Global_SNPList_'$OUTBASE'.txt' from global SNP calling step 
+OUTDIR=$5 # Path to output files 
+OUTBASE=$6 # Basename for output files, e.g. GlobalSNP_100DP646_MinInd100_MinQ20
+POPULATION=$7 # Population name
+MINDP=$8 # min depth across population
+MININD=$9 # min individuals across population
+
+cd ${BAMDIR}
+
+angsd -b ${BAMLIST} -anc ${REFERENCE} -out ${OUTDIR}${POPULATION}'_'${OUTBASE} \
+-dosaf 1 -GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 3 -doPost 1 -doVcf 1 \
+-doCounts 1 -doDepth 1 -dumpCounts 1 -P 12 -setMinDepth ${MINDP} \
+-minInd ${MININD} -sites ${SNPLIST} \
+>& ${OUTDIR}${POPULATION}'_'${OUTBASE}'.log'
+```
+
 ```R
 library(stringr)
 
@@ -114,9 +134,9 @@ sfs=sfs[complete.cases(sfs),] #eliminates lines with NA alleles
 write.table(sfs,file='Pop1-Pop2_MAF2dadiSNPinfile',row.names=F,sep='\t',quote=F)
 ```
 
-## `moments_pipeline` before models
+### `moments_pipeline` before models
 
-### To run moments_pipeline, edit lines marked by `#**************` in `moments_Run_2D_Set.py` in *moments_pipeline/Two_Population_Pipeline/* directory
+#### To run moments_pipeline, edit lines marked by `#**************` in `moments_Run_2D_Set.py` in *moments_pipeline/Two_Population_Pipeline/* directory
 - Written for Python 2.7 but I have been using 3.8.5 and it seems to work just fine.
 - `moments_Run_b4models.py` has only the code needed to run through check.
 - Ex:
@@ -168,9 +188,9 @@ print("\n=======================================================================
 fs.to_file("Pop1_Pop2.2dsfs")
 ```
 
-# Part 1B. SFS:
+# Part 1B. 2D SFS:
 
-## `angsd`
+### `angsd`
 - calculate 2D SFS with:
     - nSites = number of sites == 10,000,000 sites
     - P = number of threads  
@@ -179,26 +199,30 @@ fs.to_file("Pop1_Pop2.2dsfs")
 ```
 #!/bin/sh
 
-realSFS=/File/Path/Programs/angsd/misc/realSFS
-dir=/File/Path/to/Directory
+realSFS=$1 # Path to realSFS in angsd program directory
+dir=$2 # Path to directory
 
-Pop1=/File/Path/to/Pop1_HiRise_rh_HiC_nosites.saf.idx
-Pop2=/File/Path/to/Pop2_HiRise_rh_HiC_nosites.saf.idx
+Pop1=$3 # Path to Pop1_HiRise_rh_HiC_nosites.saf.idx
+Pop2=$4 # Path to Pop2_HiRise_rh_HiC_nosites.saf.idx
 
 ${realSFS} ${Pop1} ${Pop2} -nSites 10000000 -P 8 > ${dir}2Dsfs.Pop1_Pop2.sfs 2> ${dir}2Dsfs.Pop1_Pop2.log
 ```
 # Perform model comparisons:
 
 - all modules need to be in the working directory
-    - instead of copying files into the currect directory or always running it in the `moments_pipeline` directory, make symbolic links directly to the files.
+    - instead of copying files into the currect directory or always running it in the `moments_pipeline` directory, make symbolic links directly to the files with `moments-modules-symbolic-links.sh`.
 ```
-ln -s /File/Path/moments_pipeline/Two_Population_Pipeline/Models_2D.py Models_2D.py
-ln -s /File/Path/moments_pipeline/Two_Population_Pipeline/Summarize_Outputs.py Summarize_Outputs.py
-ln -s /File/Path/moments_pipeline/Optimize_Functions.py Optimize_Functions.py
-ln -s /File/Path/moments_pipeline/Goodness_of_Fit/Optimize_Functions_GOF.py Optimize_Functions_GOF.py
+#!/bin/sh
+
+DIR=$1 # path to moments_pipeline
+
+ln -s ${DIR}/Two_Population_Pipeline/Models_2D.py Models_2D.py
+ln -s ${DIR}/Two_Population_Pipeline/Summarize_Outputs.py Summarize_Outputs.py
+ln -s ${DIR}/Optimize_Functions.py Optimize_Functions.py
+ln -s ${DIR}/Goodness_of_Fit/Optimize_Functions_GOF.py Optimize_Functions_GOF.py
 ```
 
-# Part 2. `moments_pipeline` before models
+## Part 2. `moments_pipeline` before models
 
 ### To run moments_pipeline, edit lines marked by `#**************` in `moments_Run_2D_Set.py` in *moments_pipeline/Two_Population_Pipeline/* directory
 - `moments_Run_b4models.py` has only the code needed to run through check.
@@ -248,7 +272,7 @@ moments.Plotting.plot_single_2d_sfs(fs, vmin=5)
 pylab.show()
 ```
 
-# 3. `moments_pipeline`
+## 3. run models with `moments_pipeline`
 
 ### run live on command line or as script:
 
