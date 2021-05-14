@@ -8,7 +8,7 @@
 pip install git+https://bitbucket.org/simongravel/moments.git
 ```
 
-- Clone `moments_pipeline`:
+- Clone `moments_pipeline` (https://github.com/dportik/moments_pipeline):
 ```
 git clone https://github.com/dportik/moments_pipeline.git
 ```
