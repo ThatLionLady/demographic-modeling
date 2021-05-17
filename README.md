@@ -1,7 +1,10 @@
 # Demographic Modeling
 
-## Demographic modeling using site frequency spectrum of two populations.
+## What is this?
 
+This is how I have been doing demographic modeling for the Pacific Pocket Mouse. There are two methods: site frequency spectrum calculated in (1A) `moments` or (1B) `angsd`. Python scripts are from the `moments_pipeline` (https://github.com/dportik/moments_pipeline.git).
+
+## Demographic modeling using site frequency spectrum of two populations.
 
 - Requires `moments` to be installed (https://bitbucket.org/simongravel/moments/src/master/):
 ```
@@ -15,7 +18,7 @@ git clone https://github.com/dportik/moments_pipeline.git
 # Steps: 
 
 ## Part 1A. Allele Frequencies:
-Reformat `angsd` allele frequencies to `dadi` SNP format for use with the `moments_pipeline` to calculate SFS and perform demographic model optimizations and comparisons.
+Reformat `angsd` allele frequencies to `dadi` SNP format for use with the `moments_pipeline` to calculate site frequency spectrum (SFS) and perform demographic model optimizations and comparisons.
 
 - `R`: reformat `angsd` *GlobalSNP_HiC_100DP670_MinInd100_MinQ20.mafs_fst.vep.txt* output to `dadi` SNP format
     - scripts = `1A_MAF2dadiSNPinfile.R`
@@ -26,7 +29,7 @@ Reformat `angsd` allele frequencies to `dadi` SNP format for use with the `momen
         - *Pop1_Pop2.2dsfs*
 
 ## Part 1B. `angsd` 2D SFS:
-Calculate 2D site frequency spectum in `angsd` then read in data to `moments_pipeline`.
+Calculate 2D SFS in `angsd` then read in data to `moments_pipeline`.
 
 - `bash`: calculate 2D SFS in `angsd` from indexed indiviudal SFS *HiRise_rh_HiC_nosites.saf.idx*
     - scripts = `1B_ANGSD-2Dsfs_Pop1-Pop2.sh`
