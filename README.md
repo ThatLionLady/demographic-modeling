@@ -7,12 +7,12 @@ This is how I have been doing demographic modeling for the Pacific Pocket Mouse.
 ## Demographic modeling using site frequency spectrum of two populations.
 
 - Requires `moments` to be installed (https://bitbucket.org/simongravel/moments/src/master/):
-```
+```sh
 pip install git+https://bitbucket.org/simongravel/moments.git
 ```
 
 - Clone `moments_pipeline` (https://github.com/dportik/moments_pipeline):
-```
+```sh
 git clone https://github.com/dportik/moments_pipeline.git
 ```
 # Steps: 
@@ -89,7 +89,7 @@ Maj     Min     Allele1 DP      SS      Allele2 DP.1    SS.1    Chr     Pos
 ```
 
 - R script to reformat merged MAF output from `angsd` (ex. below).
-```
+```sh
 #!/bin/bash
 BAMDIR=$1 # Path to directory of bamfiles
 BAMLIST=$2 # Path to textfile listing bamfiles to include in population-level MAF 
@@ -199,7 +199,7 @@ fs.to_file("Pop1_Pop2.2dsfs")
     - P = number of threads  
     
 ***This takes a LONG time!*** Pop1-SS took 1 week and Pop1-Pop2 took 3+ weeks on 8 threads.
-```
+```sh
 #!/bin/sh
 
 realSFS=$1 # Path to realSFS in angsd program directory
@@ -214,7 +214,7 @@ ${realSFS} ${Pop1} ${Pop2} -nSites 10000000 -P 8 > ${dir}2Dsfs.Pop1_Pop2.sfs 2> 
 
 - all modules need to be in the working directory
     - instead of copying files into the currect directory or always running it in the `moments_pipeline` directory, make symbolic links directly to the files with `moments-modules-symbolic-links.sh`.
-```
+```sh
 #!/bin/sh
 
 DIR=$1 # path to moments_pipeline
@@ -698,6 +698,14 @@ Optimize_Functions.Optimize_Routine(fs, prefix, "sec_contact_asym_mig_size_three
 # Interpretation
 
 The final output is a plot that shows a heatmap of simulated data and the actual data as well as a heatmap and bar graph of the residuals.
+- Mapping only on lower left bc folding means you're only mapping the minor allele frequencies (top right are the common alleles)
 
-For a well fit model:
-- the data and the model heatmaps will be identical.
+
+
+***For a well fit model:***
+- Want to find model that fits the data best within the best model (highest AIC of best run from each model).
+    - IDEAL: the data and the model heatmaps will be identical.
+        - Heat Color = minor allele frequencies
+        - Top left = fixed for pop2
+        - Bottom right = fixed for pop1
+
